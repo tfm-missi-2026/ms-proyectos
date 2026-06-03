@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pe.unir.tfm.srp.proyectos.repository.ProyectoMapper">
+
+    <sql id="selectAll">
+        SELECT id, nombre_corto, nombre, descripcion, gestor_id,
+               estado, fecha_creacion, usuario_creacion,
+               fecha_modificacion, usuario_modificacion,
+               fecha_eliminacion, usuario_eliminacion, motivo_eliminacion
+          FROM msp_proyecto
+    </sql>
+
+    <select id="buscarPorId" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Proyecto">
+        <include refid="selectAll"/>
+        WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </select>
+
+    <select id="buscarPorNombreCorto" parameterType="string" resultType="pe.unir.tfm.srp.proyectos.model.Proyecto">
+        <include refid="selectAll"/>
+        WHERE nombre_corto = #{nombreCorto} AND fecha_eliminacion IS NULL
+    </select>
+
+    <select id="listarActivos" resultType="pe.unir.tfm.srp.proyectos.model.Proyecto">
+        <include refid="selectAll"/>
+        WHERE fecha_eliminacion IS NULL AND estado = 1
+        ORDER BY nombre
+    </select>
+
+    <insert id="insertar" parameterType="pe.unir.tfm.srp.proyectos.model.Proyecto">
+        INSERT INTO msp_proyecto (id, nombre_corto, nombre, descripcion, gestor_id,
+                                  estado, fecha_creacion, usuario_creacion)
+        VALUES (#{id}, #{nombreCorto}, #{nombre}, #{descripcion}, #{gestorId},
+                #{estado}, #{fechaCreacion}, #{usuarioCreacion})
+    </insert>
+
+    <update id="actualizar" parameterType="pe.unir.tfm.srp.proyectos.model.Proyecto">
+        UPDATE msp_proyecto
+           SET nombre_corto = #{nombreCorto},
+               nombre = #{nombre},
+               descripcion = #{descripcion},
+               gestor_id = #{gestorId},
+               estado = #{estado},
+               fecha_modificacion = #{fechaModificacion},
+               usuario_modificacion = #{usuarioModificacion}
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+    <update id="eliminarLogico">
+        UPDATE msp_proyecto
+           SET fecha_eliminacion = NOW(),
+               usuario_eliminacion = #{usuarioEliminacion},
+               motivo_eliminacion = #{motivoEliminacion},
+               estado = 0
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+</mapper>

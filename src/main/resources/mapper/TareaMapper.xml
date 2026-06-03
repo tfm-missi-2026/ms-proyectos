@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pe.unir.tfm.srp.proyectos.repository.TareaMapper">
+
+    <sql id="selectAll">
+        SELECT id, subproyecto_id, nombre, descripcion,
+               fecha_inicio_planificada, fecha_fin_planificada, horas_estimadas,
+               situacion_id, origen_variacion_id,
+               estado, fecha_creacion, usuario_creacion,
+               fecha_modificacion, usuario_modificacion,
+               fecha_eliminacion, usuario_eliminacion, motivo_eliminacion
+          FROM msp_tarea
+    </sql>
+
+    <select id="buscarPorId" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        <include refid="selectAll"/>
+        WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </select>
+
+    <select id="listarPorSubproyecto" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        <include refid="selectAll"/>
+        WHERE subproyecto_id = #{subproyectoId} AND fecha_eliminacion IS NULL AND estado = 1
+        ORDER BY fecha_inicio_planificada
+    </select>
+
+    <select id="listarActivas" resultType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        <include refid="selectAll"/>
+        WHERE fecha_eliminacion IS NULL AND estado = 1
+        ORDER BY fecha_inicio_planificada
+    </select>
+
+    <insert id="insertar" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        INSERT INTO msp_tarea (id, subproyecto_id, nombre, descripcion,
+                               fecha_inicio_planificada, fecha_fin_planificada, horas_estimadas,
+                               situacion_id, origen_variacion_id,
+                               estado, fecha_creacion, usuario_creacion)
+        VALUES (#{id}, #{subproyectoId}, #{nombre}, #{descripcion},
+                #{fechaInicioPlanificada}, #{fechaFinPlanificada}, #{horasEstimadas},
+                #{situacionId}, #{origenVariacionId},
+                #{estado}, #{fechaCreacion}, #{usuarioCreacion})
+    </insert>
+
+    <update id="actualizar" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        UPDATE msp_tarea
+           SET nombre = #{nombre},
+               descripcion = #{descripcion},
+               fecha_inicio_planificada = #{fechaInicioPlanificada},
+               fecha_fin_planificada = #{fechaFinPlanificada},
+               horas_estimadas = #{horasEstimadas},
+               situacion_id = #{situacionId},
+               origen_variacion_id = #{origenVariacionId},
+               estado = #{estado},
+               fecha_modificacion = #{fechaModificacion},
+               usuario_modificacion = #{usuarioModificacion}
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+    <update id="eliminarLogico">
+        UPDATE msp_tarea
+           SET fecha_eliminacion = NOW(),
+               usuario_eliminacion = #{usuarioEliminacion},
+               motivo_eliminacion = #{motivoEliminacion},
+               estado = 0
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+</mapper>

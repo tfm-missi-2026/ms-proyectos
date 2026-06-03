@@ -1,0 +1,62 @@
+# =============================================================
+# Orquestacion STANDALONE de ms-proyectos
+# Levanta SOLO este microservicio + su PostgreSQL, sin Eureka.
+#
+#   cp .env.example .env
+#   docker compose up -d --build
+#   # API:    http://localhost:8082
+#   # Health: http://localhost:8082/actuator/health
+#
+# Para el stack completo usa el repo `orquestacion`.
+# Si levantas varios servicios standalone a la vez, cambia APP_PORT y DB_PORT en .env.
+# =============================================================
+name: ms-proyectos
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: msp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-spsrt_proyectos}
+      POSTGRES_USER: ${DB_USER:-spsrt_proyectos_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-spsrt_proyectos_pwd}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - msp-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-spsrt_proyectos_user} -d ${DB_NAME:-spsrt_proyectos}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - msp-net
+
+  ms-proyectos:
+    build:
+      context: .
+    container_name: msp-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-spsrt_proyectos}
+      DB_USER: ${DB_USER:-spsrt_proyectos_user}
+      DB_PASSWORD: ${DB_PASSWORD:-spsrt_proyectos_pwd}
+      JWT_SECRET: ${JWT_SECRET:-cambiar-esta-clave-en-produccion-minimo-32-bytes-aleatorios}
+      EUREKA_CLIENT_ENABLED: "false"
+    ports:
+      - "${APP_PORT:-8082}:8082"
+    networks:
+      - msp-net
+
+volumes:
+  msp-postgres-data:
+    name: msp-postgres-data
+
+networks:
+  msp-net:
+    name: msp-net
+    driver: bridge

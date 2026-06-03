@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pe.unir.tfm.srp.proyectos.repository.SubproyectoMapper">
+
+    <sql id="selectAll">
+        SELECT id, proyecto_id, tipo_subproyecto_id, codigo_ticket, prioridad_id,
+               descripcion, solicitante_id, fecha_solicitud, situacion_id, justificacion_rechazo,
+               estado, fecha_creacion, usuario_creacion,
+               fecha_modificacion, usuario_modificacion,
+               fecha_eliminacion, usuario_eliminacion, motivo_eliminacion
+          FROM msp_subproyecto
+    </sql>
+
+    <select id="buscarPorId" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
+        <include refid="selectAll"/>
+        WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </select>
+
+    <select id="listarPorProyecto" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
+        <include refid="selectAll"/>
+        WHERE proyecto_id = #{proyectoId} AND fecha_eliminacion IS NULL AND estado = 1
+        ORDER BY fecha_solicitud DESC
+    </select>
+
+    <select id="listarActivos" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
+        <include refid="selectAll"/>
+        WHERE fecha_eliminacion IS NULL AND estado = 1
+        ORDER BY fecha_solicitud DESC
+    </select>
+
+    <insert id="insertar" parameterType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
+        INSERT INTO msp_subproyecto (id, proyecto_id, tipo_subproyecto_id, codigo_ticket, prioridad_id,
+                                     descripcion, solicitante_id, fecha_solicitud, situacion_id, justificacion_rechazo,
+                                     estado, fecha_creacion, usuario_creacion)
+        VALUES (#{id}, #{proyectoId}, #{tipoSubproyectoId}, #{codigoTicket}, #{prioridadId},
+                #{descripcion}, #{solicitanteId}, #{fechaSolicitud}, #{situacionId}, #{justificacionRechazo},
+                #{estado}, #{fechaCreacion}, #{usuarioCreacion})
+    </insert>
+
+    <update id="actualizar" parameterType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
+        UPDATE msp_subproyecto
+           SET tipo_subproyecto_id = #{tipoSubproyectoId},
+               codigo_ticket = #{codigoTicket},
+               prioridad_id = #{prioridadId},
+               descripcion = #{descripcion},
+               situacion_id = #{situacionId},
+               justificacion_rechazo = #{justificacionRechazo},
+               estado = #{estado},
+               fecha_modificacion = #{fechaModificacion},
+               usuario_modificacion = #{usuarioModificacion}
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+    <update id="eliminarLogico">
+        UPDATE msp_subproyecto
+           SET fecha_eliminacion = NOW(),
+               usuario_eliminacion = #{usuarioEliminacion},
+               motivo_eliminacion = #{motivoEliminacion},
+               estado = 0
+         WHERE id = #{id} AND fecha_eliminacion IS NULL
+    </update>
+
+</mapper>
