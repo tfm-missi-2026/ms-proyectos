@@ -10,6 +10,5 @@ public record ProyectoActualizarRequest(
     @Size(max = 50) String nombreCorto,
     @NotBlank @Size(max = 200) String nombre,
     String descripcion,
-    @NotNull UUID gestorId,
-    @NotNull Short estado
+    @NotNull UUID gestorId
 ) {}

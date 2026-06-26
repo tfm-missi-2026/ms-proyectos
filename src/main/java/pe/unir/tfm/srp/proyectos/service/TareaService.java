@@ -79,7 +79,6 @@ public class TareaService {
         existente.setHorasEstimadas(request.horasEstimadas());
         existente.setSituacionId(request.situacionId());
         existente.setOrigenVariacionId(request.origenVariacionId());
-        existente.setEstado(request.estado());
         tareaMapper.actualizar(existente);
         return tareaConversor.aTareaResponse(existente);
     }

@@ -12,6 +12,5 @@ public record SubproyectoActualizarRequest(
     @NotNull UUID prioridadId,
     @NotBlank String descripcion,
     @NotNull UUID situacionId,
-    @Size(max = 500) String justificacionRechazo,
-    @NotNull Short estado
+    @Size(max = 500) String justificacionRechazo
 ) {}

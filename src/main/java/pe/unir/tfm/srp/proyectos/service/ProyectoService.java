@@ -66,7 +66,6 @@ public class ProyectoService {
         existente.setNombre(request.nombre());
         existente.setDescripcion(request.descripcion());
         existente.setGestorId(request.gestorId());
-        existente.setEstado(request.estado());
         proyectoMapper.actualizar(existente);
         return proyectoConversor.aProyectoResponse(existente);
     }

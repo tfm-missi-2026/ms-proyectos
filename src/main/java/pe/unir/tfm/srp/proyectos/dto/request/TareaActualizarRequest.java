@@ -15,6 +15,5 @@ public record TareaActualizarRequest(
     @NotNull LocalDate fechaFinPlanificada,
     @NotNull @Positive Short horasEstimadas,
     @NotNull UUID situacionId,
-    UUID origenVariacionId,
-    @NotNull Short estado
+    UUID origenVariacionId
 ) {}

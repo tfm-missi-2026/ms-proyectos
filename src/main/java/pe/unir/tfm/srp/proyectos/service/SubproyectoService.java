@@ -78,7 +78,6 @@ public class SubproyectoService {
         existente.setDescripcion(request.descripcion());
         existente.setSituacionId(request.situacionId());
         existente.setJustificacionRechazo(request.justificacionRechazo());
-        existente.setEstado(request.estado());
         subproyectoMapper.actualizar(existente);
         return subproyectoConversor.aSubproyectoResponse(existente);
     }
