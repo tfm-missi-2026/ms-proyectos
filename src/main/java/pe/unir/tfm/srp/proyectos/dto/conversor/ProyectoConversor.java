@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import pe.unir.tfm.srp.proyectos.dto.response.ProyectoResponse;
 import pe.unir.tfm.srp.proyectos.model.Proyecto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ProyectoConversor {
 
     ProyectoResponse aProyectoResponse(Proyecto proyecto);

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import pe.unir.tfm.srp.proyectos.dto.response.TareaResponse;
 import pe.unir.tfm.srp.proyectos.model.Tarea;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TareaConversor {
 
     TareaResponse aTareaResponse(Tarea tarea);
