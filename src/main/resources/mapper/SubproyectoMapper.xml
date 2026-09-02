@@ -18,7 +18,7 @@
 
     <select id="listarPorProyecto" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
         <include refid="selectAll"/>
-        WHERE proyecto_id = #{proyectoId} AND estado = 1
+        WHERE proyecto_id = #{proyectoId}
         ORDER BY fecha_solicitud DESC
     </select>
 
