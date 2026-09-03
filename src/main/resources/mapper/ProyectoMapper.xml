@@ -22,7 +22,6 @@
 
     <select id="listarActivos" resultType="pe.unir.tfm.srp.proyectos.model.Proyecto">
         <include refid="selectAll"/>
-        WHERE estado = 1
         ORDER BY nombre
     </select>
 

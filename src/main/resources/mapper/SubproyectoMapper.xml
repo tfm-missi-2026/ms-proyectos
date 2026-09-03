@@ -24,7 +24,6 @@
 
     <select id="listarActivos" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
         <include refid="selectAll"/>
-        WHERE estado = 1
         ORDER BY fecha_solicitud DESC
     </select>
 
