@@ -33,7 +33,7 @@ CREATE TABLE msp_proyecto (
     motivo_eliminacion   VARCHAR(500)
 );
 
-CREATE UNIQUE INDEX idx_msp_proyecto_nombre_corto ON msp_proyecto(nombre_corto);
+CREATE UNIQUE INDEX idx_msp_proyecto_nombre_corto ON msp_proyecto(nombre_corto) WHERE estado = 1;
 CREATE INDEX idx_msp_proyecto_gestor ON msp_proyecto(gestor_id);
 
 COMMENT ON TABLE  msp_proyecto IS 'Catalogo de sistemas (existentes y por desarrollar) gestionados por el area';
