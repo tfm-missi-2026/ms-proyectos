@@ -51,6 +51,7 @@ public class ProyectoService {
                 .nombre(request.nombre())
                 .descripcion(request.descripcion())
                 .gestorId(request.gestorId())
+                .estado((short) 1)
                 .build();
         proyectoMapper.insertar(nuevo);
         return proyectoConversor.aProyectoResponse(nuevo);
