@@ -1,5 +1,6 @@
 package pe.unir.tfm.srp.proyectos.dto.request;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ public record SubproyectoActualizarRequest(
     @Size(max = 50) String codigoTicket,
     @NotNull UUID prioridadId,
     @NotBlank String descripcion,
+    @Size(max = 150) String solicitante,
+    LocalDate fechaSolicitud,
     @NotNull UUID situacionId,
     @Size(max = 500) String justificacionRechazo
 ) {}

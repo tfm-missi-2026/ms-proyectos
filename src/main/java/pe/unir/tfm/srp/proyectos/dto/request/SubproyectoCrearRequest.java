@@ -13,7 +13,7 @@ public record SubproyectoCrearRequest(
     @Size(max = 50) String codigoTicket,
     @NotNull UUID prioridadId,
     @NotBlank String descripcion,
-    @NotNull UUID solicitanteId,
-    @NotNull LocalDate fechaSolicitud,
+    @Size(max = 150) String solicitante,
+    LocalDate fechaSolicitud,
     @NotNull UUID situacionId
 ) {}

@@ -21,6 +21,8 @@ public interface TareaMapper {
 
     void actualizar(Tarea tarea);
 
+    void actualizarFechas(Tarea tarea);
+
     void eliminarLogico(@Param("id") UUID id,
                         @Param("usuarioEliminacion") UUID usuarioEliminacion,
                         @Param("motivoEliminacion") String motivoEliminacion);

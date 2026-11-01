@@ -61,8 +61,8 @@ CREATE TABLE msp_subproyecto (
     codigo_ticket        VARCHAR(50),
     prioridad_id         UUID         NOT NULL,
     descripcion          TEXT         NOT NULL,
-    solicitante_id       UUID         NOT NULL,
-    fecha_solicitud      DATE         NOT NULL,
+    solicitante          VARCHAR(150),
+    fecha_solicitud      DATE,
     situacion_id         UUID         NOT NULL,
     justificacion_rechazo VARCHAR(500),
     estado               SMALLINT     NOT NULL DEFAULT 1 CHECK (estado IN (0, 1)),
@@ -78,7 +78,6 @@ CREATE TABLE msp_subproyecto (
 CREATE INDEX idx_msp_subproy_proyecto ON msp_subproyecto(proyecto_id);
 CREATE INDEX idx_msp_subproy_tipo ON msp_subproyecto(tipo_subproyecto_id);
 CREATE INDEX idx_msp_subproy_situacion ON msp_subproyecto(situacion_id);
-CREATE INDEX idx_msp_subproy_solicitante ON msp_subproyecto(solicitante_id);
 
 COMMENT ON TABLE  msp_subproyecto IS 'Subproyecto: unidad de trabajo (incidencia, requerimiento o desarrollo modular) solicitada sobre un sistema. La situacion se deriva del estado de sus tareas (capa de aplicacion)';
 COMMENT ON COLUMN msp_subproyecto.id IS 'Identificador unico del subproyecto';
@@ -87,8 +86,8 @@ COMMENT ON COLUMN msp_subproyecto.tipo_subproyecto_id IS 'FK al tipo en msa_cata
 COMMENT ON COLUMN msp_subproyecto.codigo_ticket IS 'Codigo de ticket externo (Jira, ServiceDesk, etc.) cuando aplica';
 COMMENT ON COLUMN msp_subproyecto.prioridad_id IS 'FK a la prioridad en msa_catalogo grupo=PRIORIDAD (cross-BD)';
 COMMENT ON COLUMN msp_subproyecto.descripcion IS 'Detalle del subproyecto: alcance del requerimiento, descripcion del incidente o del desarrollo modular';
-COMMENT ON COLUMN msp_subproyecto.solicitante_id IS 'UUID del usuario que solicito (cross-BD a msa_usuario)';
-COMMENT ON COLUMN msp_subproyecto.fecha_solicitud IS 'Fecha en que se registro la solicitud';
+COMMENT ON COLUMN msp_subproyecto.solicitante IS 'Nombre de la persona u oficina que solicito, escrito como texto. NULL en desarrollo modular';
+COMMENT ON COLUMN msp_subproyecto.fecha_solicitud IS 'Fecha en que se registro la solicitud. NULL en desarrollo modular';
 COMMENT ON COLUMN msp_subproyecto.situacion_id IS 'FK a la situacion en msa_catalogo grupo=SITUACION (Pendiente, En atencion, Culminado, Rechazado) (cross-BD)';
 COMMENT ON COLUMN msp_subproyecto.justificacion_rechazo IS 'Motivo del rechazo (obligatorio si situacion=Rechazado)';
 COMMENT ON COLUMN msp_subproyecto.estado IS 'Estado del registro (0=inactivo, 1=activo)';
@@ -108,8 +107,9 @@ CREATE TABLE msp_tarea (
     subproyecto_id           UUID         NOT NULL REFERENCES msp_subproyecto(id),
     nombre                   VARCHAR(200) NOT NULL,
     descripcion              TEXT,
-    fecha_inicio_planificada DATE         NOT NULL,
-    fecha_fin_planificada    DATE         NOT NULL,
+    dias_estimados           SMALLINT     NOT NULL,
+    fecha_inicio_planificada DATE,
+    fecha_fin_planificada    DATE,
     horas_estimadas          SMALLINT     NOT NULL,
     situacion_id             UUID         NOT NULL,
     origen_variacion_id      UUID,
@@ -131,8 +131,9 @@ COMMENT ON COLUMN msp_tarea.id IS 'Identificador unico de la tarea';
 COMMENT ON COLUMN msp_tarea.subproyecto_id IS 'FK al subproyecto al que pertenece la tarea';
 COMMENT ON COLUMN msp_tarea.nombre IS 'Nombre de la tarea';
 COMMENT ON COLUMN msp_tarea.descripcion IS 'Descripcion extendida de la tarea';
-COMMENT ON COLUMN msp_tarea.fecha_inicio_planificada IS 'Fecha de inicio planificada de la tarea';
-COMMENT ON COLUMN msp_tarea.fecha_fin_planificada IS 'Fecha de fin planificada de la tarea';
+COMMENT ON COLUMN msp_tarea.dias_estimados IS 'Dias habiles estimados para completar la tarea';
+COMMENT ON COLUMN msp_tarea.fecha_inicio_planificada IS 'Fecha de inicio planificada; se define al asignar la tarea (NULL si no esta asignada)';
+COMMENT ON COLUMN msp_tarea.fecha_fin_planificada IS 'Fecha de fin planificada; se calcula al asignar la tarea (NULL si no esta asignada)';
 COMMENT ON COLUMN msp_tarea.horas_estimadas IS 'Horas estimadas para completar la tarea (jornada base = 8 horas)';
 COMMENT ON COLUMN msp_tarea.situacion_id IS 'FK a la situacion en msa_catalogo grupo=SITUACION (Pendiente, En atencion, Culminado, Rechazado) (cross-BD)';
 COMMENT ON COLUMN msp_tarea.origen_variacion_id IS 'FK a la variacion que origino esta tarea (NULL si es de la linea base original) (cross-BD a mss_variacion)';

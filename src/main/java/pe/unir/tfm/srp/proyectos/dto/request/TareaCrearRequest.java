@@ -1,6 +1,5 @@
 package pe.unir.tfm.srp.proyectos.dto.request;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,8 +11,7 @@ public record TareaCrearRequest(
     @NotNull UUID subproyectoId,
     @NotBlank @Size(max = 200) String nombre,
     String descripcion,
-    @NotNull LocalDate fechaInicioPlanificada,
-    @NotNull LocalDate fechaFinPlanificada,
+    @NotNull @Positive Short diasEstimados,
     @NotNull @Positive Short horasEstimadas,
     @NotNull UUID situacionId,
     UUID origenVariacionId

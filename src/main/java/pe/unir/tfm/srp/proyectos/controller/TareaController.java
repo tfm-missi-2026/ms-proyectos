@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import pe.unir.tfm.srp.proyectos.dto.request.EliminacionRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaActualizarRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaCrearRequest;
+import pe.unir.tfm.srp.proyectos.dto.request.TareaFechasRequest;
 import pe.unir.tfm.srp.proyectos.dto.response.TareaResponse;
 import pe.unir.tfm.srp.proyectos.service.TareaService;
 
@@ -55,6 +56,13 @@ public class TareaController {
     public ResponseEntity<TareaResponse> actualizar(@PathVariable UUID id,
                                                     @Valid @RequestBody TareaActualizarRequest request) {
         return ResponseEntity.ok(tareaService.actualizar(id, request));
+    }
+
+    @PutMapping("/{id}/fechas")
+    @PreAuthorize("hasAnyRole('ADMIN', 'JEFE_AREA', 'GESTOR_PROYECTO')")
+    public ResponseEntity<TareaResponse> actualizarFechas(@PathVariable UUID id,
+                                                          @Valid @RequestBody TareaFechasRequest request) {
+        return ResponseEntity.ok(tareaService.actualizarFechas(id, request));
     }
 
     @DeleteMapping("/{id}")

@@ -10,7 +10,7 @@ public record SubproyectoResponse(
     String codigoTicket,
     UUID prioridadId,
     String descripcion,
-    UUID solicitanteId,
+    String solicitante,
     LocalDate fechaSolicitud,
     UUID situacionId,
     String justificacionRechazo,

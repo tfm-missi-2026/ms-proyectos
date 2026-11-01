@@ -20,7 +20,7 @@ public class Subproyecto {
     private String codigoTicket;
     private UUID prioridadId;
     private String descripcion;
-    private UUID solicitanteId;
+    private String solicitante;
     private LocalDate fechaSolicitud;
     private UUID situacionId;
     private String justificacionRechazo;

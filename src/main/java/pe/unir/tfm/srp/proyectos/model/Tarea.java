@@ -18,6 +18,7 @@ public class Tarea {
     private UUID subproyectoId;
     private String nombre;
     private String descripcion;
+    private Short diasEstimados;
     private LocalDate fechaInicioPlanificada;
     private LocalDate fechaFinPlanificada;
     private Short horasEstimadas;

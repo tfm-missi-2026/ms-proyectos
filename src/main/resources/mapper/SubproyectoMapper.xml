@@ -4,7 +4,7 @@
 
     <sql id="selectAll">
         SELECT id, proyecto_id, tipo_subproyecto_id, codigo_ticket, prioridad_id,
-               descripcion, solicitante_id, fecha_solicitud, situacion_id, justificacion_rechazo,
+               descripcion, solicitante, fecha_solicitud, situacion_id, justificacion_rechazo,
                estado, fecha_creacion, usuario_creacion,
                fecha_modificacion, usuario_modificacion,
                fecha_eliminacion, usuario_eliminacion, motivo_eliminacion
@@ -19,20 +19,20 @@
     <select id="listarPorProyecto" parameterType="java.util.UUID" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
         <include refid="selectAll"/>
         WHERE proyecto_id = #{proyectoId}
-        ORDER BY fecha_solicitud DESC
+        ORDER BY fecha_solicitud DESC NULLS LAST
     </select>
 
     <select id="listarActivos" resultType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
         <include refid="selectAll"/>
-        ORDER BY fecha_solicitud DESC
+        ORDER BY fecha_solicitud DESC NULLS LAST
     </select>
 
     <insert id="insertar" parameterType="pe.unir.tfm.srp.proyectos.model.Subproyecto">
         INSERT INTO msp_subproyecto (id, proyecto_id, tipo_subproyecto_id, codigo_ticket, prioridad_id,
-                                     descripcion, solicitante_id, fecha_solicitud, situacion_id, justificacion_rechazo,
+                                     descripcion, solicitante, fecha_solicitud, situacion_id, justificacion_rechazo,
                                      estado, fecha_creacion, usuario_creacion)
         VALUES (#{id}, #{proyectoId}, #{tipoSubproyectoId}, #{codigoTicket}, #{prioridadId},
-                #{descripcion}, #{solicitanteId}, #{fechaSolicitud}, #{situacionId}, #{justificacionRechazo},
+                #{descripcion}, #{solicitante}, #{fechaSolicitud}, #{situacionId}, #{justificacionRechazo},
                 1, NOW(), #{usuarioCreacion})
     </insert>
 
@@ -42,6 +42,8 @@
                codigo_ticket = #{codigoTicket},
                prioridad_id = #{prioridadId},
                descripcion = #{descripcion},
+               solicitante = #{solicitante},
+               fecha_solicitud = #{fechaSolicitud},
                situacion_id = #{situacionId},
                justificacion_rechazo = #{justificacionRechazo},
                fecha_modificacion = NOW(),

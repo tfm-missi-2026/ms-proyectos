@@ -8,6 +8,7 @@ public record TareaResponse(
     UUID subproyectoId,
     String nombre,
     String descripcion,
+    Short diasEstimados,
     LocalDate fechaInicioPlanificada,
     LocalDate fechaFinPlanificada,
     Short horasEstimadas,

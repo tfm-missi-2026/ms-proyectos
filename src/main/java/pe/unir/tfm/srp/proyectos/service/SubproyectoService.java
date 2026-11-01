@@ -58,9 +58,10 @@ public class SubproyectoService {
                 .codigoTicket(request.codigoTicket())
                 .prioridadId(request.prioridadId())
                 .descripcion(request.descripcion())
-                .solicitanteId(request.solicitanteId())
+                .solicitante(request.solicitante())
                 .fechaSolicitud(request.fechaSolicitud())
                 .situacionId(request.situacionId())
+                .estado((short) 1)
                 .build();
         subproyectoMapper.insertar(nuevo);
         return subproyectoConversor.aSubproyectoResponse(nuevo);
@@ -76,6 +77,8 @@ public class SubproyectoService {
         existente.setCodigoTicket(request.codigoTicket());
         existente.setPrioridadId(request.prioridadId());
         existente.setDescripcion(request.descripcion());
+        existente.setSolicitante(request.solicitante());
+        existente.setFechaSolicitud(request.fechaSolicitud());
         existente.setSituacionId(request.situacionId());
         existente.setJustificacionRechazo(request.justificacionRechazo());
         subproyectoMapper.actualizar(existente);

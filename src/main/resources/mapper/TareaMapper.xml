@@ -4,7 +4,7 @@
 
     <sql id="selectAll">
         SELECT id, subproyecto_id, nombre, descripcion,
-               fecha_inicio_planificada, fecha_fin_planificada, horas_estimadas,
+               dias_estimados, fecha_inicio_planificada, fecha_fin_planificada, horas_estimadas,
                situacion_id, origen_variacion_id,
                estado, fecha_creacion, usuario_creacion,
                fecha_modificacion, usuario_modificacion,
@@ -30,11 +30,11 @@
 
     <insert id="insertar" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
         INSERT INTO msp_tarea (id, subproyecto_id, nombre, descripcion,
-                               fecha_inicio_planificada, fecha_fin_planificada, horas_estimadas,
+                               dias_estimados, horas_estimadas,
                                situacion_id, origen_variacion_id,
                                estado, fecha_creacion, usuario_creacion)
         VALUES (#{id}, #{subproyectoId}, #{nombre}, #{descripcion},
-                #{fechaInicioPlanificada}, #{fechaFinPlanificada}, #{horasEstimadas},
+                #{diasEstimados}, #{horasEstimadas},
                 #{situacionId}, #{origenVariacionId},
                 1, NOW(), #{usuarioCreacion})
     </insert>
@@ -43,11 +43,19 @@
         UPDATE msp_tarea
            SET nombre = #{nombre},
                descripcion = #{descripcion},
-               fecha_inicio_planificada = #{fechaInicioPlanificada},
-               fecha_fin_planificada = #{fechaFinPlanificada},
+               dias_estimados = #{diasEstimados},
                horas_estimadas = #{horasEstimadas},
                situacion_id = #{situacionId},
                origen_variacion_id = #{origenVariacionId},
+               fecha_modificacion = NOW(),
+               usuario_modificacion = #{usuarioModificacion}
+         WHERE id = #{id} AND estado = 1
+    </update>
+
+    <update id="actualizarFechas" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        UPDATE msp_tarea
+           SET fecha_inicio_planificada = #{fechaInicioPlanificada},
+               fecha_fin_planificada = #{fechaFinPlanificada},
                fecha_modificacion = NOW(),
                usuario_modificacion = #{usuarioModificacion}
          WHERE id = #{id} AND estado = 1
