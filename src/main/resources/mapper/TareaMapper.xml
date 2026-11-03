@@ -52,6 +52,14 @@
          WHERE id = #{id} AND estado = 1
     </update>
 
+    <update id="actualizarSituacion" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
+        UPDATE msp_tarea
+           SET situacion_id = #{situacionId},
+               fecha_modificacion = NOW(),
+               usuario_modificacion = #{usuarioModificacion}
+         WHERE id = #{id} AND estado = 1
+    </update>
+
     <update id="actualizarFechas" parameterType="pe.unir.tfm.srp.proyectos.model.Tarea">
         UPDATE msp_tarea
            SET fecha_inicio_planificada = #{fechaInicioPlanificada},

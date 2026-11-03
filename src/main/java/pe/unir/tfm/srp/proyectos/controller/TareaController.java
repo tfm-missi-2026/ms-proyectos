@@ -20,6 +20,7 @@ import pe.unir.tfm.srp.proyectos.dto.request.EliminacionRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaActualizarRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaCrearRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaFechasRequest;
+import pe.unir.tfm.srp.proyectos.dto.request.TareaSituacionRequest;
 import pe.unir.tfm.srp.proyectos.dto.response.TareaResponse;
 import pe.unir.tfm.srp.proyectos.service.TareaService;
 
@@ -63,6 +64,13 @@ public class TareaController {
     public ResponseEntity<TareaResponse> actualizarFechas(@PathVariable UUID id,
                                                           @Valid @RequestBody TareaFechasRequest request) {
         return ResponseEntity.ok(tareaService.actualizarFechas(id, request));
+    }
+
+    @PutMapping("/{id}/situacion")
+    @PreAuthorize("hasRole('RECURSO_TECNICO')")
+    public ResponseEntity<TareaResponse> actualizarSituacion(@PathVariable UUID id,
+                                                             @Valid @RequestBody TareaSituacionRequest request) {
+        return ResponseEntity.ok(tareaService.actualizarSituacion(id, request));
     }
 
     @DeleteMapping("/{id}")

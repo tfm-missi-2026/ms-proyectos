@@ -13,6 +13,7 @@ import pe.unir.tfm.srp.proyectos.dto.request.EliminacionRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaActualizarRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaCrearRequest;
 import pe.unir.tfm.srp.proyectos.dto.request.TareaFechasRequest;
+import pe.unir.tfm.srp.proyectos.dto.request.TareaSituacionRequest;
 import pe.unir.tfm.srp.proyectos.dto.response.TareaResponse;
 import pe.unir.tfm.srp.proyectos.exception.RecursoNoEncontradoException;
 import pe.unir.tfm.srp.proyectos.model.Tarea;
@@ -92,6 +93,17 @@ public class TareaService {
         existente.setFechaInicioPlanificada(request.fechaInicioPlanificada());
         existente.setFechaFinPlanificada(request.fechaFinPlanificada());
         tareaMapper.actualizarFechas(existente);
+        return tareaConversor.aTareaResponse(existente);
+    }
+
+    @Transactional
+    public TareaResponse actualizarSituacion(UUID id, TareaSituacionRequest request) {
+        Tarea existente = tareaMapper.buscarPorId(id);
+        if (existente == null) {
+            throw new RecursoNoEncontradoException("Tarea " + id + " no encontrada");
+        }
+        existente.setSituacionId(request.situacionId());
+        tareaMapper.actualizarSituacion(existente);
         return tareaConversor.aTareaResponse(existente);
     }
 
